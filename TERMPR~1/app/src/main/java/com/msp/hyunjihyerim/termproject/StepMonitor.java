@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -175,10 +176,10 @@ public class StepMonitor extends Service implements SensorEventListener{
         //***** classification *****//
         // check if there is a step or not:
         // 1. 3축 가속도 데이터의 1초 평균 RMS 값이 기준 문턱값을 넘으면 step이 있었다고 판단함
-        if(avgRms > AVG_RMS_THRESHOLD) {
+        if(avgRms > 3) {
             // 1-1. step 수는 1초 걸음 시 step 수가 일정하다고 가정하고, 그 값을 더해 줌
             steps += NUMBER_OF_STEPS_PER_SEC;
-            Log.d(LOGTAG, "steps: " + steps);
+            Log.d("LOGTAG", "steps: " + steps);
 
             // if step counts increase, send steps data to MainActivity
             Intent intent = new Intent("kr.ac.koreatech.msp.stepmonitor");

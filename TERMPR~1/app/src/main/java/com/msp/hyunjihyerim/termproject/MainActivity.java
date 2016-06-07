@@ -12,15 +12,19 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import static android.os.Environment.getExternalStorageDirectory;
+
 public class MainActivity extends AppCompatActivity {
     TextView t_record; // 기록한 파일을 읽어와 데이터를 출력하는 뷰
     int index = 0;
     String message;
+    File file;
 
     DataReceiver dataReceiver;
 
@@ -43,6 +47,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         t_record = (TextView) findViewById(R.id.t_record);
 
+        //외부메모리에 파일 생성
+        file = new File(getExternalStorageDirectory().getAbsolutePath(), "StepRecord.txt");
+
+        //파일이 기존에 있다면 그 파일에 그대로 값을 append를 한다(덮어쓰는게 아님)
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file,true);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         dataReceiver = new  DataReceiver();
         IntentFilter intentFilter = new IntentFilter();
         //서비스클래스에서 보낸 메세지인지 구별하기 위해 어떤 종류의 액션을받을지 설정.
@@ -58,14 +77,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        t_record.setText(ReadTextFile());
+        try {
+            t_record.setText(ReadTextFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 텍스트파일에서 기록을 읽어와 t_record 뷰에 출력한다.
-    public String ReadTextFile() {
+    public String ReadTextFile() throws IOException {
         String text = null;
         try {
-            File file = getFileStreamPath("StepRecord.txt");
+            file = getFileStreamPath("StepRecord.txt");
+
+
             FileInputStream fis = new FileInputStream(file);
             Reader in = new InputStreamReader(fis);
             int size = fis.available();
@@ -76,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             text = new String(buffer);
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
 
         return text;
