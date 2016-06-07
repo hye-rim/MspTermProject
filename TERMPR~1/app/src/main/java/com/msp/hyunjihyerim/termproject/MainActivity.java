@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction(StepMonitor.Data_ACTION);
         registerReceiver(dataReceiver, intentFilter);
 
+        Intent intent = new Intent( this,StepMonitor.class);
+        startService(intent);
+
+
     }
 
     @Override
