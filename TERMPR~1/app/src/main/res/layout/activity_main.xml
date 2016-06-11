@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:id="@+id/t_view"
-        android:autoText="true"
         android:background="#ffcdcd"
         android:layout_marginTop="5dp"
         android:textAlignment="center"

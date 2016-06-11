@@ -24,12 +24,17 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by hyun ji Ra on 2016-05-26.
  */
 public class StepMonitor extends Service implements SensorEventListener{
     final static String  Data_ACTION = "Data_ACTION";
+    static String Data_DATE = "Data_DATE"; //년-월-일 정보
+    static String Data_TOP = "Data_TOP"; //Moving time, steps, top place 출력
     private SensorManager mSensorManager;
     LocationManager locManager;
     private Sensor mLinear;
@@ -39,6 +44,9 @@ public class StepMonitor extends Service implements SensorEventListener{
     private double steps; // 걸음 수
     double duringtime; //
     double currLatitude, currLongitude; // 현재 위치의 위도와 경도
+
+    String date;
+
 
     LocationListener locationListener = new LocationListener(){
 
@@ -89,6 +97,9 @@ public class StepMonitor extends Service implements SensorEventListener{
     public void onCreate() {
         super.onCreate();
 
+        date = new String(getDate());
+        getDate();
+
         i.setAction(Data_ACTION);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -98,7 +109,7 @@ public class StepMonitor extends Service implements SensorEventListener{
         mSensorManager.registerListener(this,mLinear,SensorManager.SENSOR_DELAY_NORMAL);
 
 
-        // 현재 위치를 얻어온다다
+        // 현재 위치를 얻어온다
        try{
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
         } catch (SecurityException e) {
@@ -108,6 +119,12 @@ public class StepMonitor extends Service implements SensorEventListener{
     }
 
 
+    public static String getDate(){
+        SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+        Date date = new Date();
+        String strDate = dateFormat.format(date);
+        return strDate;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -194,7 +211,7 @@ public class StepMonitor extends Service implements SensorEventListener{
     public void writeToFile(String msg){
 
         //외부메모리에 파일 생성
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "StepRecord.txt");
+        File file = new File(getExternalFilesDir(null), "StepRecord.txt");
 
         try{
             //파일이 기존에 있다면 그 파일에 그대로 값을 append를 한다(덮어쓰는게 아님)
