@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
+    <!--오늘 날짜, 정보 출력-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,17 +23,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/t_view"
+        android:id="@+id/t_step"
+        android:autoText="true"
         android:background="#ffcdcd"
         android:layout_marginTop="5dp"
-        android:textAlignment="center"
-        android:textSize="25dp"
+        android:textSize="32dp"
         android:textStyle="bold"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:gravity="center" />
 
+    <!---Data가 출력되는 TextView가 포함된 ScrollView-->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="280dp"
         android:id="@+id/scrollView"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"
@@ -44,5 +47,37 @@
             android:id="@+id/t_record"
             android:textColor="#000000" />
     </ScrollView>
+
+
+    <!---모니터링 시작, 정지버튼-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시작"
+            android:id="@+id/b_start"
+            android:background="#96ec9d"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginRight="5dp"
+            android:onClick="onClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="정지"
+            android:id="@+id/b_stop"
+            android:background="#fe6c6c"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:onClick="onClick" />
+    </LinearLayout>
 
 </LinearLayout>
